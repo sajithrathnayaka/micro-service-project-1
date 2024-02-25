@@ -16,9 +16,11 @@ import java.util.List;
 public class VehicleController {
     private final VehicleService vehicleService;
 
-    @PostMapping
+    @PostMapping("/{studentIndex}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveVehicle(@RequestBody VehicleRequest vehicleRequest) {
+    public void saveVehicle(@RequestBody VehicleRequest vehicleRequest, @PathVariable String studentIndex) {
+
+
         vehicleService.saveVehicle(vehicleRequest);
     }
 

@@ -57,14 +57,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Optional<StudentDTO> findById(String pk) throws Exception {
-
         Optional<Student> student = studentRepo.findById(pk);
-        System.out.println("+++++++++++========================++++++++++++");
-        System.out.println(student);
-        if (Optional.empty().isPresent()) {
+        if (student.isPresent()) {
+
             return Optional.of(mapper.map(student, StudentDTO.class));
         } else {
-            throw new NotFoundException("no student fount for this ");
+            throw new NotFoundException("no student found for this index");
         }
     }
 

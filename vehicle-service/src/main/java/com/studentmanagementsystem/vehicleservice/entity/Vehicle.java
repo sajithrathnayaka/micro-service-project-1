@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Vehicle {
     @Id
     private String id;
+    private String studentIndex;
     private String namePlate;
     private String category;
     private String brand;

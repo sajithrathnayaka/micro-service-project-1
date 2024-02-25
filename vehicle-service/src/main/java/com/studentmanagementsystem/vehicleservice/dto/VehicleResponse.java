@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class VehicleResponse {
     private String id;
+    private String studentIndex;
     private String namePlate;
     private String category;
     private String brand;

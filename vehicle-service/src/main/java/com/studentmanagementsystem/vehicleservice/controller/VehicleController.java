@@ -1,12 +1,15 @@
 package com.studentmanagementsystem.vehicleservice.controller;
 
+import com.studentmanagementsystem.vehicleservice.dto.StandardResponse;
 import com.studentmanagementsystem.vehicleservice.dto.VehicleRequest;
 import com.studentmanagementsystem.vehicleservice.dto.VehicleResponse;
 import com.studentmanagementsystem.vehicleservice.repository.VehicleRepo;
 import com.studentmanagementsystem.vehicleservice.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -19,11 +22,10 @@ public class VehicleController {
     @PostMapping("/{studentIndex}")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveVehicle(@RequestBody VehicleRequest vehicleRequest, @PathVariable String studentIndex) {
+        vehicleRequest.setStudentIndex(studentIndex);
+        vehicleService.saveVehicle(vehicleRequest, studentIndex);
 
-
-        vehicleService.saveVehicle(vehicleRequest);
     }
-
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

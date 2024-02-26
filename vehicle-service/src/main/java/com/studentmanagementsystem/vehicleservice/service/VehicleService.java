@@ -31,12 +31,12 @@ public class VehicleService {
 
     private final VehicleRepo vehicleRepo;
     private final ModelMapper mapper;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     public void saveVehicle(VehicleRequest vehicleRequest,String studentIndex) {
         try {
-            StandardResponse standardResponseMono = webClient.get()
-                    .uri("http://localhost:8085/api/v1/students/{studentId}", studentIndex)
+            StandardResponse standardResponseMono = webClientBuilder.build().get()
+                    .uri("http://student-service/api/v1/students/{studentId}", studentIndex)
                     .retrieve()
                     .bodyToMono(StandardResponse.class)
                     .block();

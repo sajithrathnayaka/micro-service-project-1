@@ -5,26 +5,43 @@ import com.studentmanagementsystem.vehicleservice.dto.VehicleRequest;
 import com.studentmanagementsystem.vehicleservice.dto.VehicleResponse;
 import com.studentmanagementsystem.vehicleservice.repository.VehicleRepo;
 import com.studentmanagementsystem.vehicleservice.service.VehicleService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/v1/vehicle")
 @RequiredArgsConstructor
+@Slf4j
 public class VehicleController {
     private final VehicleService vehicleService;
 
     @PostMapping("/{studentIndex}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveVehicle(@RequestBody VehicleRequest vehicleRequest, @PathVariable String studentIndex) {
+    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
+    @TimeLimiter(name = "inventory")
+    @Retry(name = "inventory")
+    public CompletableFuture<String> saveVehicle(@RequestBody VehicleRequest vehicleRequest, @PathVariable String studentIndex) {
+        System.out.println("vehicle controller post mapping");
         vehicleRequest.setStudentIndex(studentIndex);
-        vehicleService.saveVehicle(vehicleRequest, studentIndex);
+        //vehicleService.saveVehicle(vehicleRequest, studentIndex);
+        return CompletableFuture.supplyAsync(() -> vehicleService.saveVehicle(vehicleRequest, studentIndex));
 
+    }
+    public CompletableFuture<String> fallbackMethod(VehicleRequest vehicleRequest, RuntimeException runtimeException) {
+        log.info("Cannot Place Order Executing Fallback logic");
+        return CompletableFuture.supplyAsync(() -> "Oops! Something went wrong, please order after some time!");
     }
 
     @GetMapping

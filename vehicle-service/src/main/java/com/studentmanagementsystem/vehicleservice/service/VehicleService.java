@@ -33,27 +33,28 @@ public class VehicleService {
     private final ModelMapper mapper;
     private final WebClient.Builder webClientBuilder;
 
-    public void saveVehicle(VehicleRequest vehicleRequest,String studentIndex) {
+    public String saveVehicle(VehicleRequest vehicleRequest,String studentIndex) {
+        System.out.println("save method of vehicle service");
         try {
             StandardResponse standardResponseMono = webClientBuilder.build().get()
                     .uri("http://student-service/api/v1/students/{studentId}", studentIndex)
                     .retrieve()
                     .bodyToMono(StandardResponse.class)
                     .block();
-            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            System.out.println(standardResponseMono);
             Vehicle vehicle = mapper.map(vehicleRequest, Vehicle.class);
             vehicleRepo.save(vehicle);
             log.info("vehicle {} is saved",vehicle.getNamePlate());
+            return "Vehicle saved successfully";
         } catch (Exception e) {
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             System.out.println(e);
-
+            return "cannot save !!!";
         }
 
     }
 
     public List<VehicleResponse> getAllVehicles() {
+        System.out.println("get all vehicles");
         List<Vehicle> vehicles = vehicleRepo.findAll();
         return vehicles.stream().map(vehicle -> mapper.map(vehicle, VehicleResponse.class)).collect(Collectors.toList());
     }

@@ -27,16 +27,15 @@ import java.util.concurrent.CompletableFuture;
 public class VehicleController {
     private final VehicleService vehicleService;
 
-    @PostMapping("/{studentIndex}")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
     @TimeLimiter(name = "inventory")
     @Retry(name = "inventory")
-    public CompletableFuture<String> saveVehicle(@RequestBody VehicleRequest vehicleRequest, @PathVariable String studentIndex) {
-        System.out.println("vehicle controller post mapping");
-        vehicleRequest.setStudentIndex(studentIndex);
-        //vehicleService.saveVehicle(vehicleRequest, studentIndex);
-        return CompletableFuture.supplyAsync(() -> vehicleService.saveVehicle(vehicleRequest, studentIndex));
+    public CompletableFuture<String> saveVehicle(@RequestBody VehicleRequest vehicleRequest) {
+        //vehicleRequest.setStudentIndex(studentIndex);
+        //vehicleService.saveVehicle(vehicleRequest);
+        return CompletableFuture.supplyAsync(() -> vehicleService.saveVehicle(vehicleRequest));
 
     }
     public CompletableFuture<String> fallbackMethod(VehicleRequest vehicleRequest, RuntimeException runtimeException) {

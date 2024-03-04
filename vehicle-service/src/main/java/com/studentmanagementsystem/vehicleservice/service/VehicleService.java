@@ -33,11 +33,11 @@ public class VehicleService {
     private final ModelMapper mapper;
     private final WebClient.Builder webClientBuilder;
 
-    public String saveVehicle(VehicleRequest vehicleRequest,String studentIndex) {
-        System.out.println("save method of vehicle service");
+    public String saveVehicle(VehicleRequest vehicleRequest) {
+        String studentIndex = vehicleRequest.getStudentIndex();
         try {
             StandardResponse standardResponseMono = webClientBuilder.build().get()
-                    .uri("http://student-service/api/v1/students/{studentId}", studentIndex)
+                    .uri("http://student-service/api/v1/students/{studentIndex}",studentIndex)
                     .retrieve()
                     .bodyToMono(StandardResponse.class)
                     .block();

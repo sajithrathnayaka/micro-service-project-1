@@ -52,11 +52,13 @@ public class VehicleService {
             Optional<VehicleResponse> index = Optional.ofNullable(findByIndex(studentIndex));
             System.out.println(index);
             if (index.isPresent()) {
-                throw new RuntimeException();
+                throw new RuntimeException("this student vehicle is already saved");
             }
+            System.out.println("student service run success");
             Vehicle vehicle = mapper.map(vehicleRequest, Vehicle.class);
-
+            System.out.println("mapping success");
             vehicleRepo.save(vehicle);
+            System.out.println("save suc");
             kafkaTemplate.send("notificationTopic", new VehicleSavedEvent(vehicle.getNamePlate()));
 
             log.info("vehicle {} is saved",vehicle.getNamePlate());

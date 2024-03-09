@@ -29,9 +29,9 @@ public class VehicleController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
-    @TimeLimiter(name = "inventory")
-    @Retry(name = "inventory")
+    @CircuitBreaker(name = "student", fallbackMethod = "fallbackMethod")
+    @TimeLimiter(name = "student")
+    @Retry(name = "student")
     public CompletableFuture<String> saveVehicle(@RequestBody VehicleRequest vehicleRequest) {
         //vehicleRequest.setStudentIndex(studentIndex);
         //vehicleService.saveVehicle(vehicleRequest);

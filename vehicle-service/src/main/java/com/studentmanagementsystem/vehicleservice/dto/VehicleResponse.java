@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class VehicleResponse {
-    private String id;
+
     private String studentIndex;
     private String namePlate;
     private String category;
